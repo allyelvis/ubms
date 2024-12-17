@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: ./ae-pos
+    container_name: ubms_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ae-pos:/app
+    depends_on:
+      - database
+  frontend:
+    build:
+      context: ./Smart-store-room
+    container_name: ubms_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Smart-store-room:/app
+  database:
+    image: postgres:15
+    container_name: ubms_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ubms
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  chrome_extension:
+    build:
+      context: ./posc
+    container_name: ubms_invoice_extension
+    volumes:
+      - ./posc:/app
+volumes:
+  postgres_data:
